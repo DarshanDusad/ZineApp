@@ -4,12 +4,15 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../screens/InfoScreen.dart';
 import '../screens/TeamScreen.dart';
+import '../screens/AchievementPage.dart';
+import '../screens/ProjectScreen.dart';
 
 const instaUrl = "https://www.instagram.com/zine.robotics/";
 const facebookUrl = "https://www.facebook.com/ROBOTICS.ZINE";
 const siteUrl = "http://zine.co.in/";
 
 class HomePage extends StatefulWidget {
+  static const route = "/home";
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -18,8 +21,10 @@ class _HomePageState extends State<HomePage> {
   var currentIndex = 2;
   ScrollController controller;
   void _selectedTab(int index) {
-    currentIndex = index;
-    print(currentIndex);
+    setState(() {
+      currentIndex = index;
+      print(currentIndex);
+    });
   }
 
   Widget buildFAB(double topSize, Orientation orientation) {
@@ -71,17 +76,20 @@ class _HomePageState extends State<HomePage> {
       top: top,
       right: 20.0,
       child: new Transform(
-        transform: new Matrix4.identity()..scale(scale),
+        transform: Matrix4.identity()..scale(scale),
         alignment: Alignment.center,
         child: Container(
           height: 100,
           width: 100,
           child: new FloatingActionButton(
+            heroTag: "A",
             child: Icon(
               Icons.info,
               size: orientation == Orientation.portrait ? 36 : 50,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(InfoScreen.route);
+            },
           ),
         ),
       ),
@@ -108,14 +116,19 @@ class _HomePageState extends State<HomePage> {
     var orientation = MediaQuery.of(context).orientation;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.grey[200],
         floatingActionButton: FloatingActionButton(
+          heroTag: "B",
           child: Icon(
             Icons.home,
             color: Colors.white,
             size: 30,
           ),
           onPressed: () {
-            currentIndex = 4;
+            setState(() {
+              currentIndex = 4;
+            });
+
             print(4);
           },
         ),
@@ -159,6 +172,7 @@ class _HomePageState extends State<HomePage> {
               controller: controller,
               slivers: [
                 SliverAppBar(
+                  backgroundColor: Colors.blue[600],
                   actions: [
                     IconButton(
                       icon: Icon(
@@ -224,12 +238,15 @@ class _HomePageState extends State<HomePage> {
                         padding: top > 80.0
                             ? EdgeInsets.only(bottom: 30, top: 10)
                             : EdgeInsets.only(top: 5),
-                        child: Text(
-                          "ZINE",
-                          style: TextStyle(
-                            fontSize:
-                                orientation == Orientation.portrait ? 30 : 20,
-                            fontFamily: "Megatron",
+                        child: Hero(
+                          tag: "h",
+                          child: Text(
+                            "ZINE",
+                            style: TextStyle(
+                              fontSize:
+                                  orientation == Orientation.portrait ? 30 : 20,
+                              fontFamily: "Megatron",
+                            ),
                           ),
                         ),
                       ),
@@ -266,26 +283,71 @@ class _HomePageState extends State<HomePage> {
                     );
                   }),
                 ),
-                SliverGrid(
-                  delegate: SliverChildListDelegate([
-                    Container(
-                      margin: EdgeInsets.only(top: 20, left: 20),
-                      child: InkWell(
-                        splashColor: Colors.blue,
-                        onTap: () {
-                          Navigator.of(context).pushNamed(TeamScreen.route);
-                        },
+                if (currentIndex != 0)
+                  SliverGrid(
+                    delegate: SliverChildListDelegate([
+                      Container(
+                        margin: EdgeInsets.only(top: 20, left: 20),
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                           elevation: 15,
-                          child: Center(
+                          child: InkWell(
+                            splashColor: Colors.blue[200],
+                            onTap: () {
+                              Navigator.of(context).pushNamed(TeamScreen.route);
+                            },
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    EvaIcons.people,
+                                    color: Colors.grey,
+                                    size: orientation == Orientation.portrait
+                                        ? 60
+                                        : 100,
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  FittedBox(
+                                    child: Text(
+                                      "Team",
+                                      style: TextStyle(
+                                          fontFamily: "Opensans",
+                                          color: Colors.grey[700],
+                                          fontSize: orientation ==
+                                                  Orientation.portrait
+                                              ? 20
+                                              : 36),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 20, right: 20),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 15,
+                          child: InkWell(
+                            splashColor: Colors.blue[200],
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(AchievementPage.route);
+                            },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  EvaIcons.people,
+                                FaIcon(
+                                  FontAwesomeIcons.trophy,
                                   color: Colors.grey,
                                   size: orientation == Orientation.portrait
                                       ? 60
@@ -296,7 +358,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 FittedBox(
                                   child: Text(
-                                    "Team",
+                                    "Achievements",
                                     style: TextStyle(
                                         fontFamily: "Opensans",
                                         color: Colors.grey[700],
@@ -311,56 +373,63 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 20, right: 20),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        elevation: 15,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.trophy,
-                              color: Colors.grey,
-                              size: orientation == Orientation.portrait
-                                  ? 60
-                                  : 100,
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            FittedBox(
-                              child: Text(
-                                "Achievements",
-                                style: TextStyle(
-                                    fontFamily: "Opensans",
-                                    color: Colors.grey[700],
-                                    fontSize:
-                                        orientation == Orientation.portrait
-                                            ? 20
-                                            : 36),
+                      Container(
+                        margin: EdgeInsets.only(top: 20, left: 20),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 15,
+                          child: Container(
+                            child: InkWell(
+                              splashColor: Colors.blue[200],
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(ProjectScreen.route);
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.assignment,
+                                    color: Colors.grey,
+                                    size: orientation == Orientation.portrait
+                                        ? 60
+                                        : 100,
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  FittedBox(
+                                    child: Text(
+                                      "Projects",
+                                      style: TextStyle(
+                                          fontFamily: "Opensans",
+                                          color: Colors.grey[700],
+                                          fontSize: orientation ==
+                                                  Orientation.portrait
+                                              ? 20
+                                              : 36),
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 20, left: 20),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        elevation: 15,
-                        child: Container(
+                      Container(
+                        margin: EdgeInsets.only(top: 20, right: 20),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 15,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.assignment,
+                              FaIcon(
+                                FontAwesomeIcons.pen,
                                 color: Colors.grey,
                                 size: orientation == Orientation.portrait
                                     ? 60
@@ -371,7 +440,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               FittedBox(
                                 child: Text(
-                                  "Projects",
+                                  "Blogs",
                                   style: TextStyle(
                                       fontFamily: "Opensans",
                                       color: Colors.grey[700],
@@ -385,52 +454,131 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
+                    ]),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.9,
+                      crossAxisSpacing: 10,
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 20, right: 20),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        elevation: 15,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.pen,
-                              color: Colors.grey,
-                              size: orientation == Orientation.portrait
-                                  ? 60
-                                  : 100,
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            FittedBox(
-                              child: Text(
-                                "Blogs",
-                                style: TextStyle(
-                                    fontFamily: "Opensans",
-                                    color: Colors.grey[700],
-                                    fontSize:
-                                        orientation == Orientation.portrait
-                                            ? 20
-                                            : 36),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.9,
-                    crossAxisSpacing: 10,
                   ),
-                ),
                 SliverList(
                   delegate: SliverChildListDelegate([
+                    if (currentIndex == 0)
+                      SizedBox(
+                        height: 100,
+                      ),
+                    if (currentIndex == 0)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 20),
+                        child: TextFormField(
+                          style: TextStyle(
+                            fontFamily: "OpenSans",
+                            fontSize: 16,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                          enabled: false,
+                          decoration: InputDecoration(
+                              labelText: "USERNAME",
+                              labelStyle: TextStyle(
+                                  fontFamily: "OpenSans",
+                                  fontSize: 16,
+                                  color: Colors.grey[700]),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0,
+                                ),
+                              ),
+                              fillColor: Color.alphaBlend(
+                                Theme.of(context).primaryColor.withOpacity(.07),
+                                Colors.grey.withOpacity(.04),
+                              ),
+                              filled: true,
+                              prefixIcon: Icon(
+                                Icons.person,
+                                size: 30,
+                                color: Colors.black,
+                              )),
+                          initialValue: "Darshan Dusad",
+                        ),
+                      ),
+                    if (currentIndex == 0)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25, vertical: 20),
+                        child: TextFormField(
+                          style: TextStyle(
+                            fontFamily: "OpenSans",
+                            fontSize: 16,
+                            //fontWeight: FontWeight.bold,
+                          ),
+                          enabled: false,
+                          decoration: InputDecoration(
+                              labelText: "EMAIL",
+                              labelStyle: TextStyle(
+                                fontFamily: "OpenSans",
+                                fontSize: 16,
+                                color: Colors.grey[700],
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.0,
+                                ),
+                              ),
+                              fillColor: Color.alphaBlend(
+                                Theme.of(context).primaryColor.withOpacity(.07),
+                                Colors.grey.withOpacity(.04),
+                              ),
+                              filled: true,
+                              prefixIcon: Icon(
+                                Icons.email,
+                                size: 30,
+                                color: Colors.black,
+                              )),
+                          initialValue: "2019ucp1416@mnit.ac.in",
+                        ),
+                      ),
+                    if (currentIndex == 0)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 25),
+                        child: TextFormField(
+                          style: TextStyle(
+                            fontFamily: "OpenSans",
+                            fontSize: 16,
+                            //fontWeight: FontWeight.bold,
+                          ),
+                          enabled: false,
+                          decoration: InputDecoration(
+                              labelText: "DOMAINS OF INTEREST",
+                              labelStyle: TextStyle(
+                                  fontFamily: "OpenSans",
+                                  fontSize: 16,
+                                  color: Colors.grey[700]),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.0,
+                                ),
+                              ),
+                              fillColor: Color.alphaBlend(
+                                Theme.of(context).primaryColor.withOpacity(.07),
+                                Colors.grey.withOpacity(.04),
+                              ),
+                              filled: true,
+                              prefixIcon: Icon(
+                                Icons.assessment,
+                                size: 30,
+                                color: Colors.black,
+                              )),
+                          initialValue: "BEE , Algorithms",
+                        ),
+                      ),
                     SizedBox(
                       height: 250,
                     )
@@ -560,90 +708,3 @@ class FABBottomAppBarState extends State<FABBottomAppBar> {
     );
   }
 }
-// BottomNavigationBar(
-//           onTap: (index) {
-//             setState(() {
-//               currentIndex = index;
-//               print(currentIndex);
-//             });
-//           },
-//           currentIndex: currentIndex,
-//           type: BottomNavigationBarType.shifting,
-//           items: [
-//             BottomNavigationBarItem(
-//               icon: Icon(
-//                 Icons.person,
-//                 color: Colors.grey,
-//                 size: 30,
-//               ),
-//               title: Text(
-//                 "Profile",
-//                 style: TextStyle(
-//                   fontFamily: "Opensans",
-//                   color: Colors.black,
-//                   fontSize: 18,
-//                 ),
-//               ),
-//             ),
-//             BottomNavigationBarItem(
-//               icon: FaIcon(
-//                 FontAwesomeIcons.question,
-//                 color: Colors.grey,
-//                 size: 30,
-//               ),
-//               title: Text(
-//                 "FAQs",
-//                 style: TextStyle(
-//                   fontFamily: "Opensans",
-//                   color: Colors.black,
-//                   fontSize: 18,
-//                 ),
-//               ),
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(
-//                 Icons.home,
-//                 color: Colors.grey,
-//                 size: 30,
-//               ),
-//               title: Text(
-//                 "Home",
-//                 style: TextStyle(
-//                   fontFamily: "Opensans",
-//                   color: Colors.black,
-//                   fontSize: 18,
-//                 ),
-//               ),
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(
-//                 Icons.phone,
-//                 color: Colors.grey,
-//                 size: 30,
-//               ),
-//               title: Text(
-//                 "Contact Us",
-//                 style: TextStyle(
-//                   fontFamily: "Opensans",
-//                   color: Colors.black,
-//                   fontSize: 18,
-//                 ),
-//               ),
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(
-//                 Icons.question_answer,
-//                 color: Colors.grey,
-//                 size: 30,
-//               ),
-//               title: Text(
-//                 "Channel",
-//                 style: TextStyle(
-//                   fontFamily: "Opensans",
-//                   color: Colors.black,
-//                   fontSize: 18,
-//                 ),
-//               ),
-//             )
-//           ],
-//         ),
