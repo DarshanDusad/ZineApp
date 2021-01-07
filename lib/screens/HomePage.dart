@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +8,8 @@ import '../screens/InfoScreen.dart';
 import '../screens/TeamScreen.dart';
 import '../screens/AchievementPage.dart';
 import '../screens/ProjectScreen.dart';
+import '../screens/AuthScreen.dart';
+import '../providers/data.dart';
 
 const instaUrl = "https://www.instagram.com/zine.robotics/";
 const facebookUrl = "https://www.facebook.com/ROBOTICS.ZINE";
@@ -101,6 +105,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     controller = new ScrollController();
     controller.addListener(() => setState(() {}));
+    SharedPreferences.getInstance().then(
+      (ref) {
+        Provider.of<Data>(context, listen: false).addData(
+          ref.getString("token"),
+          ref.getString("name"),
+          ref.getString("email"),
+          ref.getString("domain"),
+        );
+      },
+    );
   }
 
   @override
@@ -112,6 +126,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<Data>(context);
     var size = MediaQuery.of(context).size;
     var orientation = MediaQuery.of(context).orientation;
     return SafeArea(
@@ -181,12 +196,36 @@ class _HomePageState extends State<HomePage> {
                         size: 30,
                       ),
                       onPressed: () async {
-                        if (await canLaunch(facebookUrl)) {
-                          await launch(
-                            facebookUrl,
-                            forceWebView: false,
-                          );
-                        }
+                        var ref = await SharedPreferences.getInstance();
+                        ref.clear();
+                        Provider.of<Data>(context, listen: false).clear();
+                        Navigator.of(context)
+                            .pushReplacement(MaterialPageRoute(builder: (ctx) {
+                          return FutureBuilder(
+                              future: SharedPreferences.getInstance().then(
+                                (value) => value.getString("token"),
+                              ),
+                              builder: (ctx, snap) {
+                                if (snap.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Scaffold(
+                                    body: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+                                if (snap.hasData) {
+                                  return HomePage();
+                                }
+                                return AuthScreen();
+                              });
+                        }));
+                        // if (await canLaunch(facebookUrl)) {
+                        //   await launch(
+                        //     facebookUrl,
+                        //     forceWebView: false,
+                        //   );
+                        // }
                       },
                     ),
                     IconButton(
@@ -501,7 +540,7 @@ class _HomePageState extends State<HomePage> {
                                 size: 30,
                                 color: Colors.black,
                               )),
-                          initialValue: "Darshan Dusad",
+                          initialValue: provider.name,
                         ),
                       ),
                     if (currentIndex == 0)
@@ -539,7 +578,7 @@ class _HomePageState extends State<HomePage> {
                                 size: 30,
                                 color: Colors.black,
                               )),
-                          initialValue: "2019ucp1416@mnit.ac.in",
+                          initialValue: provider.email,
                         ),
                       ),
                     if (currentIndex == 0)
@@ -576,7 +615,7 @@ class _HomePageState extends State<HomePage> {
                                 size: 30,
                                 color: Colors.black,
                               )),
-                          initialValue: "BEE , Algorithms",
+                          initialValue: provider.domain,
                         ),
                       ),
                     SizedBox(
