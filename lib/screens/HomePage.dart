@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:timeline_tile/timeline_tile.dart';
+import '../screens/ChatScreen.dart';
 import '../screens/InfoScreen.dart';
 import '../screens/TeamScreen.dart';
 import '../screens/AchievementPage.dart';
@@ -22,13 +24,752 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var currentIndex = 2;
+  var currentIndex = 4;
   ScrollController controller;
   void _selectedTab(int index) {
     setState(() {
       currentIndex = index;
       print(currentIndex);
     });
+  }
+
+  List<Widget> buildTimeline(orientation) {
+    return [
+      TimelineTile(
+        isFirst: true,
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Orientation",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "3 rd January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.lightbulb,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.amber,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Aptititude Test",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "3 rd January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.assignment,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.red[700],
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "Start of learning period",
+                  style: TextStyle(
+                      fontFamily: "OpenSans",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "15 th January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.library_books,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.green,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "BEE Blog",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "15 th January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.library_books,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.green,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Algorithms Blog",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "18 th January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.library_books,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.green,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "BME Blog",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "21 st January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.library_books,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.green,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "IC-MCU Blog",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "24 th January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.library_books,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.green,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Aeromodelling Blog",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "27 th January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.library_books,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.green,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "End of learning period",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "3 rd January",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.library_books,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.green,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Projects selection",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "31 st Jan",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.laptop_chromebook,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.blue[800],
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Mentors assigned and project starts",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "1st February",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.laptop_chromebook,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.blue[800],
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Mid Evaluation",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "4th February",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.assignment,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.red[700],
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Final Evaluation",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "7 th February",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.assignment,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.red[700],
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+      TimelineTile(
+        isLast: true,
+        endChild: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Interviews",
+                style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        ),
+        startChild: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              "Will be conveyed",
+              style: TextStyle(
+                fontFamily: "Lobster",
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+        afterLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        beforeLineStyle: LineStyle(
+          color: Colors.grey[400],
+        ),
+        alignment: TimelineAlign.center,
+        indicatorStyle: IndicatorStyle(
+          iconStyle: IconStyle(
+            iconData: Icons.assignment,
+            fontSize: 30,
+          ),
+          width: 50,
+          color: Colors.red[700],
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+        ),
+      ),
+    ];
   }
 
   Widget buildFAB(double topSize, Orientation orientation) {
@@ -107,12 +848,14 @@ class _HomePageState extends State<HomePage> {
     controller.addListener(() => setState(() {}));
     SharedPreferences.getInstance().then(
       (ref) {
-        Provider.of<Data>(context, listen: false).addData(
+        var provider = Provider.of<Data>(context, listen: false);
+        provider.addData(
           ref.getString("token"),
           ref.getString("name"),
           ref.getString("email"),
-          ref.getString("domain"),
+          ref.getString("uid"),
         );
+        provider.fetchRooms();
       },
     );
   }
@@ -159,12 +902,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 text: 'Profile'),
             FABBottomAppBarItem(
-                icon: FaIcon(
-                  FontAwesomeIcons.question,
-                  color: Colors.grey,
-                  size: 30,
-                ),
-                text: 'FAQs'),
+              icon: Icon(
+                Icons.timeline,
+                color: Colors.grey,
+                size: 30,
+              ),
+              text: 'Timeline',
+            ),
             FABBottomAppBarItem(
                 icon: Icon(
                   Icons.phone,
@@ -173,12 +917,12 @@ class _HomePageState extends State<HomePage> {
                 ),
                 text: 'Contact Us'),
             FABBottomAppBarItem(
-                icon: Icon(
-                  Icons.question_answer,
+                icon: FaIcon(
+                  FontAwesomeIcons.pen,
                   color: Colors.grey,
-                  size: 30,
+                  size: 27,
                 ),
-                text: 'Channel'),
+                text: 'Blogs'),
           ],
         ),
         body: Stack(
@@ -196,36 +940,12 @@ class _HomePageState extends State<HomePage> {
                         size: 30,
                       ),
                       onPressed: () async {
-                        var ref = await SharedPreferences.getInstance();
-                        ref.clear();
-                        Provider.of<Data>(context, listen: false).clear();
-                        Navigator.of(context)
-                            .pushReplacement(MaterialPageRoute(builder: (ctx) {
-                          return FutureBuilder(
-                              future: SharedPreferences.getInstance().then(
-                                (value) => value.getString("token"),
-                              ),
-                              builder: (ctx, snap) {
-                                if (snap.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Scaffold(
-                                    body: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                }
-                                if (snap.hasData) {
-                                  return HomePage();
-                                }
-                                return AuthScreen();
-                              });
-                        }));
-                        // if (await canLaunch(facebookUrl)) {
-                        //   await launch(
-                        //     facebookUrl,
-                        //     forceWebView: false,
-                        //   );
-                        // }
+                        if (await canLaunch(facebookUrl)) {
+                          await launch(
+                            facebookUrl,
+                            forceWebView: false,
+                          );
+                        }
                       },
                     ),
                     IconButton(
@@ -322,7 +1042,7 @@ class _HomePageState extends State<HomePage> {
                     );
                   }),
                 ),
-                if (currentIndex != 0)
+                if (currentIndex == 4)
                   SliverGrid(
                     delegate: SliverChildListDelegate([
                       Container(
@@ -464,32 +1184,38 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           elevation: 15,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.pen,
-                                color: Colors.grey,
-                                size: orientation == Orientation.portrait
-                                    ? 60
-                                    : 100,
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  "Blogs",
-                                  style: TextStyle(
-                                      fontFamily: "Opensans",
-                                      color: Colors.grey[700],
-                                      fontSize:
-                                          orientation == Orientation.portrait
-                                              ? 20
-                                              : 36),
+                          child: InkWell(
+                            splashColor: Colors.blue[200],
+                            onTap: () {
+                              Navigator.of(context).pushNamed(ChatScreen.route);
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.question_answer,
+                                  color: Colors.grey,
+                                  size: orientation == Orientation.portrait
+                                      ? 60
+                                      : 100,
                                 ),
-                              )
-                            ],
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                FittedBox(
+                                  child: Text(
+                                    "Chat",
+                                    style: TextStyle(
+                                        fontFamily: "Opensans",
+                                        color: Colors.grey[700],
+                                        fontSize:
+                                            orientation == Orientation.portrait
+                                                ? 20
+                                                : 36),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -504,7 +1230,7 @@ class _HomePageState extends State<HomePage> {
                   delegate: SliverChildListDelegate([
                     if (currentIndex == 0)
                       SizedBox(
-                        height: 100,
+                        height: 50,
                       ),
                     if (currentIndex == 0)
                       Padding(
@@ -584,42 +1310,52 @@ class _HomePageState extends State<HomePage> {
                     if (currentIndex == 0)
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 25),
-                        child: TextFormField(
-                          style: TextStyle(
-                            fontFamily: "OpenSans",
-                            fontSize: 16,
-                            //fontWeight: FontWeight.bold,
+                            vertical: 20, horizontal: 70),
+                        child: RaisedButton(
+                          color: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          enabled: false,
-                          decoration: InputDecoration(
-                              labelText: "DOMAINS OF INTEREST",
-                              labelStyle: TextStyle(
-                                  fontFamily: "OpenSans",
-                                  fontSize: 16,
-                                  color: Colors.grey[700]),
-                              disabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(100),
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 0.0,
-                                ),
-                              ),
-                              fillColor: Color.alphaBlend(
-                                Theme.of(context).primaryColor.withOpacity(.07),
-                                Colors.grey.withOpacity(.04),
-                              ),
-                              filled: true,
-                              prefixIcon: Icon(
-                                Icons.assessment,
-                                size: 30,
-                                color: Colors.black,
-                              )),
-                          initialValue: provider.domain,
+                          child: Text(
+                            "Log Out",
+                            style: TextStyle(
+                              fontFamily: "OpenSans",
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: () async {
+                            var ref = await SharedPreferences.getInstance();
+                            ref.clear();
+                            Provider.of<Data>(context, listen: false).clear();
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (ctx) {
+                              return FutureBuilder(
+                                  future: SharedPreferences.getInstance().then(
+                                    (value) => value.getString("token"),
+                                  ),
+                                  builder: (ctx, snap) {
+                                    if (snap.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Scaffold(
+                                        body: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    }
+                                    if (snap.hasData) {
+                                      return HomePage();
+                                    }
+                                    return AuthScreen();
+                                  });
+                            }));
+                          },
                         ),
                       ),
+                    if (currentIndex == 1) ...buildTimeline(orientation),
                     SizedBox(
-                      height: 250,
+                      height: currentIndex == 0 ? 200 : 250,
                     )
                   ]),
                 )

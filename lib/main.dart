@@ -6,6 +6,7 @@ import './screens/TeamScreen.dart';
 import './screens/AchievementPage.dart';
 import './screens/ProjectScreen.dart';
 import './screens/AuthScreen.dart';
+import './screens/ChatScreen.dart';
 import 'package:splashscreen/splashscreen.dart';
 import './providers/data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         return Data();
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Zine',
         routes: {
           InfoScreen.route: (ctx) => InfoScreen(),
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
           AchievementPage.route: (ctx) => AchievementPage(),
           ProjectScreen.route: (ctx) => ProjectScreen(),
           HomePage.route: (ctx) => HomePage(),
-          AuthScreen.route: (ctx) => AuthScreen()
+          AuthScreen.route: (ctx) => AuthScreen(),
+          ChatScreen.route: (ctx) => ChatScreen()
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,

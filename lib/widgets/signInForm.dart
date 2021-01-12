@@ -7,7 +7,7 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   var key = GlobalKey<FormState>();
-  var state = [false, false, false, false, false];
+  var state = [true, false, false, false, false];
   var domains = ["BEE", "BME", "IC-MCU", "Algorithms", "Aeromodelling"];
   String name;
   bool error = false;
@@ -26,7 +26,7 @@ class _SignInFormState extends State<SignInForm> {
         }
         key.currentState.save();
 
-        Navigator.of(context).pop({"name": name, "domain": domain});
+        Navigator.of(context).pop({"name": name, "domain": "DUMMY"});
       }
     }
   }
@@ -71,6 +71,9 @@ class _SignInFormState extends State<SignInForm> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return "Please enter your full name";
+                      }
+                      if (value.length < 3) {
+                        return "Please enter a username of atleast 3 characters";
                       }
 
                       return null;
@@ -127,147 +130,147 @@ class _SignInFormState extends State<SignInForm> {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 30,
               ),
-              Container(
-                child: Text(
-                  "Your domain of interest",
-                  style: TextStyle(
-                      fontFamily: "OpenSans",
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              CheckboxListTile(
-                value: state[0],
-                onChanged: (val) {
-                  setState(() {
-                    if (val) {
-                      error = false;
-                      state[1] = false;
-                      state[2] = false;
-                      state[3] = false;
-                      state[4] = false;
-                    }
-                    state[0] = val;
-                  });
-                },
-                title: Text(
-                  "Basic Electrical and Electronics",
-                  style: TextStyle(
-                    fontFamily: "OpenSans",
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              CheckboxListTile(
-                value: state[1],
-                onChanged: (val) {
-                  setState(() {
-                    if (val) {
-                      error = false;
-                      state[0] = false;
-                      state[2] = false;
-                      state[3] = false;
-                      state[4] = false;
-                    }
-                    state[1] = val;
-                  });
-                },
-                title: Text(
-                  "Basic Mechanical",
-                  style: TextStyle(
-                    fontFamily: "OpenSans",
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              CheckboxListTile(
-                value: state[2],
-                onChanged: (val) {
-                  setState(() {
-                    if (val) {
-                      error = false;
-                      state[1] = false;
-                      state[0] = false;
-                      state[3] = false;
-                      state[4] = false;
-                    }
-                    state[2] = val;
-                  });
-                },
-                title: Text(
-                  "IC - MCU",
-                  style: TextStyle(
-                    fontFamily: "OpenSans",
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              CheckboxListTile(
-                value: state[3],
-                onChanged: (val) {
-                  setState(() {
-                    if (val) {
-                      error = false;
-                      state[1] = false;
-                      state[2] = false;
-                      state[0] = false;
-                      state[4] = false;
-                    }
-                    state[3] = val;
-                  });
-                },
-                title: Text(
-                  "Algorithms and Pseudocode",
-                  style: TextStyle(
-                    fontFamily: "OpenSans",
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              CheckboxListTile(
-                value: state[4],
-                onChanged: (val) {
-                  setState(() {
-                    if (val) {
-                      error = false;
-                      state[1] = false;
-                      state[2] = false;
-                      state[3] = false;
-                      state[0] = false;
-                    }
-                    state[4] = val;
-                  });
-                  print(state[4]);
-                },
-                title: Text(
-                  "Aeromodelling",
-                  style: TextStyle(
-                    fontFamily: "OpenSans",
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              if (error)
-                Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Please fill your domain of interest",
-                    style: TextStyle(
-                      fontFamily: "OpenSans",
-                      fontSize: 12,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
+              // Container(
+              //   child: Text(
+              //     "Your domain of interest",
+              //     style: TextStyle(
+              //         fontFamily: "OpenSans",
+              //         fontSize: 18,
+              //         fontWeight: FontWeight.bold),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
+              // CheckboxListTile(
+              //   value: state[0],
+              //   onChanged: (val) {
+              //     setState(() {
+              //       if (val) {
+              //         error = false;
+              //         state[1] = false;
+              //         state[2] = false;
+              //         state[3] = false;
+              //         state[4] = false;
+              //       }
+              //       state[0] = val;
+              //     });
+              //   },
+              //   title: Text(
+              //     "Basic Electrical and Electronics",
+              //     style: TextStyle(
+              //       fontFamily: "OpenSans",
+              //       fontSize: 16,
+              //     ),
+              //   ),
+              // ),
+              // CheckboxListTile(
+              //   value: state[1],
+              //   onChanged: (val) {
+              //     setState(() {
+              //       if (val) {
+              //         error = false;
+              //         state[0] = false;
+              //         state[2] = false;
+              //         state[3] = false;
+              //         state[4] = false;
+              //       }
+              //       state[1] = val;
+              //     });
+              //   },
+              //   title: Text(
+              //     "Basic Mechanical",
+              //     style: TextStyle(
+              //       fontFamily: "OpenSans",
+              //       fontSize: 16,
+              //     ),
+              //   ),
+              // ),
+              // CheckboxListTile(
+              //   value: state[2],
+              //   onChanged: (val) {
+              //     setState(() {
+              //       if (val) {
+              //         error = false;
+              //         state[1] = false;
+              //         state[0] = false;
+              //         state[3] = false;
+              //         state[4] = false;
+              //       }
+              //       state[2] = val;
+              //     });
+              //   },
+              //   title: Text(
+              //     "IC - MCU",
+              //     style: TextStyle(
+              //       fontFamily: "OpenSans",
+              //       fontSize: 16,
+              //     ),
+              //   ),
+              // ),
+              // CheckboxListTile(
+              //   value: state[3],
+              //   onChanged: (val) {
+              //     setState(() {
+              //       if (val) {
+              //         error = false;
+              //         state[1] = false;
+              //         state[2] = false;
+              //         state[0] = false;
+              //         state[4] = false;
+              //       }
+              //       state[3] = val;
+              //     });
+              //   },
+              //   title: Text(
+              //     "Algorithms and Pseudocode",
+              //     style: TextStyle(
+              //       fontFamily: "OpenSans",
+              //       fontSize: 16,
+              //     ),
+              //   ),
+              // ),
+              // CheckboxListTile(
+              //   value: state[4],
+              //   onChanged: (val) {
+              //     setState(() {
+              //       if (val) {
+              //         error = false;
+              //         state[1] = false;
+              //         state[2] = false;
+              //         state[3] = false;
+              //         state[0] = false;
+              //       }
+              //       state[4] = val;
+              //     });
+              //     print(state[4]);
+              //   },
+              //   title: Text(
+              //     "Aeromodelling",
+              //     style: TextStyle(
+              //       fontFamily: "OpenSans",
+              //       fontSize: 16,
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              // if (error)
+              //   Container(
+              //     margin: EdgeInsets.only(bottom: 20),
+              //     alignment: Alignment.centerLeft,
+              //     child: Text(
+              //       "Please fill your domain of interest",
+              //       style: TextStyle(
+              //         fontFamily: "OpenSans",
+              //         fontSize: 12,
+              //         color: Colors.red,
+              //       ),
+              //     ),
+              //   ),
               RaisedButton(
                 color: Colors.blue,
                 shape: RoundedRectangleBorder(
@@ -283,9 +286,6 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                 ),
                 onPressed: submitInfo,
-              ),
-              SizedBox(
-                height: 20,
               ),
             ],
           ),
