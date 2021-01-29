@@ -84,7 +84,7 @@ class ProjectScreen extends StatelessWidget {
                     ConstrainedBox(
                       constraints: BoxConstraints(maxHeight: 300),
                       child: Image.asset(
-                        "assets/images/Placeholder.jpg",
+                        "assets/images/project${index + 1}.jpg",
                         fit: BoxFit.fill,
                       ),
                     ),

@@ -5,7 +5,8 @@ import '../providers/data.dart';
 class CustomDrawer extends StatelessWidget {
   final index;
   final onTap;
-  CustomDrawer(this.index, this.onTap);
+  final chats;
+  CustomDrawer(this.index, this.onTap, this.chats);
 
   String getInitials(String text) {
     String firstPart = text;
@@ -17,6 +18,9 @@ class CustomDrawer extends StatelessWidget {
       if (secondPart.isEmpty) {
         secondPart = "A";
       }
+      if (secondPart[0] == "(") {
+        secondPart = "Zine";
+      }
       return firstPart[0].toUpperCase() + secondPart[0].toUpperCase();
     }
     if (firstPart.length < 2) {
@@ -26,6 +30,9 @@ class CustomDrawer extends StatelessWidget {
   }
 
   List<Widget> getMembers(int i, List<Room> rooms) {
+    if (!chats) {
+      return [Container()];
+    }
     //print("Length: ${rooms[i].members.length}");
     return List.generate(
       rooms[i].members.length,
@@ -65,47 +72,46 @@ class CustomDrawer extends StatelessWidget {
       "BME": Colors.pink,
       "IC MCU and Sensors": Colors.blue,
       "BEE": Colors.purple,
-      "Aeromodelling": Colors.amber,
-      "Workshop 2020": Colors.brown
+      "Aeromodelling": Colors.amber[700],
+      "Workshop 2020": Colors.brown,
+      "Help": Colors.red[400],
+      "Admin Only": Colors.teal,
     };
-    // print(rooms.length);
+    print("No of rooms:" + rooms.length.toString());
 
-    return List.generate(
-      rooms.length,
-      (i) {
-        //print(i.toString() + " : " + rooms[i].id);
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-          ),
-          child: ListTile(
-            onTap: () {
-              onTap(i);
-              Navigator.of(context).pop();
-            },
-            contentPadding: EdgeInsets.all(5),
-            leading: CircleAvatar(
-              radius: 22,
-              backgroundColor: colors[rooms[i].name],
-              child: Text(
-                getInitials(rooms[i].name),
-                style: TextStyle(
-                  fontFamily: "OpenSans",
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            title: Text(
-              rooms[i].name,
+    return List.generate(rooms.length, (i) {
+      //print(i.toString() + " : " + rooms[i].id);
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        child: ListTile(
+          onTap: () {
+            onTap(i);
+            Navigator.of(context).pop();
+          },
+          contentPadding: EdgeInsets.all(5),
+          leading: CircleAvatar(
+            radius: 22,
+            backgroundColor: colors[rooms[i].name] ?? Colors.green,
+            child: Text(
+              getInitials(rooms[i].name),
               style: TextStyle(
                 fontFamily: "OpenSans",
-                fontSize: 16,
+                color: Colors.white,
               ),
             ),
           ),
-        );
-      },
-    );
+          title: Text(
+            rooms[i].name,
+            style: TextStyle(
+              fontFamily: "OpenSans",
+              fontSize: 16,
+            ),
+          ),
+        ),
+      );
+    }, growable: true);
   }
 
   @override
@@ -124,9 +130,9 @@ class CustomDrawer extends StatelessWidget {
                 "Rooms",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "Lobster",
+                  fontFamily: "OpenSans",
                   color: Colors.white,
                 ),
               ),
@@ -145,9 +151,9 @@ class CustomDrawer extends StatelessWidget {
                 "Members",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  fontFamily: "Lobster",
+                  fontFamily: "OpenSans",
                   color: Colors.white,
                 ),
               ),

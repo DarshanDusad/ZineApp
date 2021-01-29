@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:flutter_socket_io/flutter_socket_io.dart';
+import 'package:flutter_socket_io/socket_io_manager.dart';
 
 class Message {
   DateTime dateTime;
@@ -41,18 +43,25 @@ class Room {
 }
 
 class Data with ChangeNotifier {
+  bool isAnonymous = false;
+  bool initDone = false;
+  int number = -1;
   var colors = [
     Colors.green,
     Colors.pink,
-    Colors.blue,
+    Colors.deepOrange,
     Colors.purple,
-    Colors.amber
+    Colors.amber[700],
+    Colors.teal
   ];
   String token;
   String name;
   String email;
   String domain = "DUMMY";
   String uid;
+  SocketIO socketIO;
+  int currentRoom = 0;
+
   List<Room> rooms = [];
 
   void addData(String token, String name, String email, String uid) {
@@ -68,6 +77,9 @@ class Data with ChangeNotifier {
     this.token = null;
     this.name = null;
     this.email = null;
+    this.socketIO.unSubscribesAll();
+    this.socketIO.disconnect();
+    this.socketIO = null;
   }
 
   Future<void> fetchRooms() async {
@@ -76,7 +88,7 @@ class Data with ChangeNotifier {
       print("uid:" + uid);
       print("token:" + token);
       response = await http.post(
-        "http://10.0.2.2:3000/api/rooms",
+        "http://18.207.115.53:3000/api/rooms",
         headers: {
           "authorization": "Bearer $token",
           "content-type": "application/json",
@@ -88,12 +100,14 @@ class Data with ChangeNotifier {
         ),
       );
       var body = json.decode(response.body);
-      print("hello");
-      print(body);
+
+      //print(body);
       if (body != null) {
-        print("rooms:");
+        //print("rooms:");
         // print(body);
         List fetchedRooms = body["chats"];
+        number = fetchedRooms.length;
+        notifyListeners();
         fetchedRooms.forEach((element) async {
           var roomId = element["_id"];
           var roomName = element["conversationName"];
@@ -104,32 +118,41 @@ class Data with ChangeNotifier {
             var id = data["id"];
 
             http.Response info = await http.get(
-              "http://10.0.2.2:3000/api/user?userId=$id",
+              "http://18.207.115.53:3000/api/user?userId=$id",
               headers: {
                 "authorization": "Bearer $token",
                 "content-type": "application/json",
               },
             );
             if (json.decode(info.body) != null) {
-              var index = Random().nextInt(5);
+              var index = Random().nextInt(6);
               var color = colors[index];
-              var name = json.decode(info.body)["user"]["fullName"];
-              //print(name);
-              if (name == null) {
-                name = "NULL";
+              // if (json.decode(info.body)["user"] == null) {
+              //   print("Room" + roomName + " has ghosts!");
+              // }
+              //print("Members of room name : " + roomName);
+              if (json.decode(info.body)["user"] != null) {
+                var name = json.decode(info.body)["user"]["fullName"];
+                if (!participants.any((element) => element.name == name)) {
+                  if (name == null) {
+                    name = "NULL";
+                  }
+                  participants.add(
+                    Member(
+                      name: name,
+                      uid: id,
+                      color: color,
+                    ),
+                  );
+                }
+                //print(name);
+
               }
-              participants.add(
-                Member(
-                  name: name,
-                  uid: id,
-                  color: color,
-                ),
-              );
             }
           });
           List<Message> chats = [];
           http.Response messages = await http.post(
-            "http://10.0.2.2:3000/api/messages",
+            "http://18.207.115.53:3000/api/messages",
             headers: {
               "authorization": "Bearer $token",
               "content-type": "application/json",
@@ -171,6 +194,7 @@ class Data with ChangeNotifier {
           }
           // print(messages);
           if (!rooms.any((element) => element.name == roomName)) {
+            print("Added room!");
             rooms.add(
               Room(
                   id: roomId,
@@ -178,12 +202,16 @@ class Data with ChangeNotifier {
                   members: participants,
                   messages: chats),
             );
+
+            notifyListeners();
           }
         });
       }
     } catch (error) {
       print(error.toString());
     }
+    sort();
+
     notifyListeners();
   }
 
@@ -194,23 +222,65 @@ class Data with ChangeNotifier {
       element.members.sort(
           (m1, m2) => m1.name.toLowerCase().compareTo(m2.name.toLowerCase()));
     });
-    notifyListeners();
   }
 
-  void init() {
-    print("In init");
-    IO.Socket socket = IO.io(
-      'http://10.0.2.2:3000/',
-      <String, dynamic>{
-        'transports': ['websocket', 'polling'],
-      },
+  Future<void> init() async {
+    try {
+      print("init");
+      socketIO =
+          SocketIOManager().createSocketIO('http://18.207.115.53:3000', "/");
+      socketIO.init();
+      print("After init");
+      socketIO.connect();
+      socketIO.subscribe('message', (jsonData) {
+        print("Message receivedkkkk");
+        print(jsonData);
+        var data = json.decode(jsonData);
+        var id = data["senderId"];
+        var name = data["senderName"];
+        print("halo");
+        var member = rooms[currentRoom].members.firstWhere((element) {
+          print("ay");
+          return element.uid == id;
+        }, orElse: () {
+          print("ey");
+          return Member(
+            name: name,
+            uid: id,
+            color: Colors.pink,
+          );
+        });
+        rooms[currentRoom].messages.add(
+              Message(
+                  dateTime: DateTime.parse(data["createdAt"]),
+                  sender: member,
+                  text: data["content"]),
+            );
+        notifyListeners();
+      });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  Future<void> changeRoom(int index) async {
+    currentRoom = index;
+    socketIO.sendMessage(
+      'leave-room',
+      json.encode(
+        {"userId": uid, "name": name, "roomId": rooms[currentRoom].id},
+      ),
     );
-    socket.onConnectError(
-      (_) {
-        print('connect');
-      },
+    socketIO.sendMessage(
+      'join-room',
+      json.encode(
+        {
+          "userId": uid,
+          "name": name,
+          "roomId": rooms[index].id,
+        },
+      ),
     );
-    socket.connect();
-    print(socket.connected);
+    notifyListeners();
   }
 }

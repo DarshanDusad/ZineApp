@@ -191,7 +191,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -311,7 +311,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -376,7 +376,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -438,7 +438,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -503,7 +503,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -565,7 +565,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xf544,
                         fontFamily: "Robot",
                         fontPackage: null,
@@ -630,7 +630,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -750,7 +750,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -815,7 +815,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xf544,
                         fontFamily: "Robot",
                         fontPackage: null,
@@ -880,7 +880,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -944,7 +944,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1009,7 +1009,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1073,7 +1073,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1138,7 +1138,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1202,7 +1202,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1267,7 +1267,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1331,7 +1331,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1396,7 +1396,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1460,7 +1460,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,
@@ -1525,7 +1525,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xf544,
                         fontFamily: "Robot",
                         fontPackage: null,
@@ -1590,7 +1590,7 @@ class AchievementPage extends StatelessWidget {
                   alignment: TimelineAlign.center,
                   indicatorStyle: IndicatorStyle(
                     iconStyle: IconStyle(
-                      iconData: IconData(
+                      iconData: const IconData(
                         0xe800,
                         fontFamily: "Trophy",
                         fontPackage: null,

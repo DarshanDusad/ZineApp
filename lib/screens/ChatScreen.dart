@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_socket_io/flutter_socket_io.dart';
 import '../widgets/messageBubble.dart';
 import '../widgets/drawer.dart';
 import '../providers/data.dart';
@@ -16,39 +18,23 @@ class _ChatScreenState extends State<ChatScreen> {
   var controller = ScrollController(keepScrollOffset: true);
   var roomIndex = 0;
   var focusNode = FocusNode();
+  var textController = TextEditingController();
+  var chats = false;
   @override
   void initState() {
     super.initState();
     Provider.of<Data>(context, listen: false).sort();
-    Provider.of<Data>(context, listen: false).init();
-    // print("HII:" +
-    //     Provider.of<Data>(context, listen: false).rooms.length.toString());
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-  }
-
-  @override
-  void dispose() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    super.dispose();
   }
 
   void onTap(int index) {
     setState(() {
       roomIndex = index;
+      chats = true;
     });
-    controller.animateTo(
-      0,
-      duration: Duration(milliseconds: 100),
-      curve: Curves.linear,
-    );
+    Provider.of<Data>(context, listen: false).changeRoom(index);
+    if (!chats) {
+      return;
+    }
   }
 
   List<Widget> getMessages(int index, List<Room> rooms, String name) {
@@ -79,6 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
           name: message.sender.name,
           dateTime: message.dateTime,
           me: message.sender.name == name,
+          color: message.sender.color,
         );
       }).reversed,
     );
@@ -93,13 +80,13 @@ class _ChatScreenState extends State<ChatScreen> {
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
-          child: CustomDrawer(roomIndex, onTap),
+          child: CustomDrawer(roomIndex, onTap, chats),
         ),
         body: Stack(
           children: [
             TopBar(
               focusNode: focusNode,
-              title: provider.rooms[roomIndex].name,
+              title: !chats ? "Chats" : provider.rooms[roomIndex].name,
             ),
             Positioned(
               top: 130,
@@ -122,100 +109,149 @@ class _ChatScreenState extends State<ChatScreen> {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                       ),
-                      Expanded(
-                        child: ListView(
-                          reverse: true,
-                          controller: controller,
-                          shrinkWrap: true,
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            ...getMessages(
-                              roomIndex,
-                              provider.rooms,
-                              provider.name,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            )
-                          ],
+                      if (!chats) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Image.asset("assets/images/Splash.gif"),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text(
+                            "Welcome to Zine Communication Channel ! Click a room on the left to chat.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: "OpenSans",
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ],
+                      if (chats)
+                        Expanded(
+                          child: ListView(
+                            reverse: true,
+                            controller: controller,
+                            shrinkWrap: true,
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ...getMessages(
+                                roomIndex,
+                                provider.rooms,
+                                provider.name,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              )
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: Container(
-                width: size.width,
-                padding: EdgeInsets.all(15),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        focusNode: focusNode,
-                        onSaved: (input) {},
-                        style: TextStyle(
-                            fontFamily: "OpenSans",
-                            fontSize: 14,
-                            color: Colors.black.withOpacity(.65)),
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(vertical: 4.0),
-                            hintText: "What's on your mind....",
-                            hintStyle: TextStyle(
-                                fontFamily: "OpenSans",
-                                color: Colors.grey[700],
-                                fontSize: 15),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
-                              borderSide: BorderSide(
-                                color: Colors.blue,
-                                width: 1.5,
+            if (chats)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: Container(
+                  width: size.width,
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          minLines: 1,
+                          maxLines: 3,
+                          keyboardType: TextInputType.multiline,
+                          onFieldSubmitted: (_) {
+                            focusNode.unfocus();
+                          },
+                          controller: textController,
+                          focusNode: focusNode,
+                          style: TextStyle(
+                              fontFamily: "OpenSans",
+                              fontSize: 14,
+                              color: Colors.black.withOpacity(.65)),
+                          decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.symmetric(vertical: 4.0),
+                              hintText: "What's on your mind....",
+                              hintStyle: TextStyle(
+                                  fontFamily: "OpenSans",
+                                  color: Colors.grey[700],
+                                  fontSize: 15),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: BorderSide(
+                                  color: Colors.blue,
+                                  width: 1.5,
+                                ),
                               ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
                               ),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
-                              borderSide: BorderSide(
-                                color: Colors.red,
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
                               ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(100),
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(100),
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
                               ),
-                            ),
-                            fillColor: Colors.white,
-                            filled: true,
-                            prefixIcon: Icon(
-                              Icons.message,
-                              size: 25,
-                            )),
+                              fillColor: Colors.white,
+                              filled: true,
+                              prefixIcon: Icon(
+                                Icons.message,
+                                size: 25,
+                              )),
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.send,
-                        color: Colors.blue,
-                      ),
-                      onPressed: () {
-                        focusNode.unfocus();
-                      },
-                    )
-                  ],
+                      if (chats)
+                        IconButton(
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () {
+                            focusNode.unfocus();
+                            textController.text = textController.text.trim();
+                            if (textController.text == "" ||
+                                textController.text.isEmpty ||
+                                !provider.initDone) {
+                              return;
+                            }
+                            provider.socketIO.sendMessage(
+                                'message',
+                                json.encode({
+                                  'senderId': provider.uid,
+                                  'content': textController.text,
+                                  'createdAt': DateTime.now()
+                                      .subtract(Duration(
+                                        hours: 5,
+                                        minutes: 30,
+                                      ))
+                                      .toIso8601String(),
+                                  'senderName': provider.name
+                                }), () {
+                              print("Sent!!");
+                            });
+                            textController.text = "";
+                          },
+                        )
+                    ],
+                  ),
                 ),
-              ),
-            )
+              )
           ],
         ),
       ),
@@ -278,7 +314,7 @@ class TopBar extends StatelessWidget {
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: title == "Chats" ? 30 : 22,
                   fontWeight: FontWeight.bold,
                   fontFamily: "OpenSans",
                   color: Colors.white,

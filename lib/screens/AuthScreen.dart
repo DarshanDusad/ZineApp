@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:zine/widgets/signInForm.dart';
@@ -37,11 +38,17 @@ class _AuthScreenState extends State<AuthScreen> {
         if (value.isEmpty) {
           return "Please enter a valid college email address";
         }
-        if (value.startsWith("2020") &&
-            (value.endsWith("@mnit.ac.in") ||
-                value.endsWith("@iiitkota.ac.in"))) {
+        if (value.endsWith("@zine.co.in")) {
           return null;
         }
+        if (value.length != 27 && value.length != 22) {
+          return "Please enter a valid college email address";
+        }
+        if ((value.startsWith("2020") && value.endsWith("@mnit.ac.in")) ||
+            (value.startsWith("2020") && value.endsWith("@iiitkota.ac.in"))) {
+          return null;
+        }
+
         return "Please enter a valid college email address";
       },
       passwordValidator: (value) {
@@ -54,7 +61,11 @@ class _AuthScreenState extends State<AuthScreen> {
           confirmPasswordError: "Passwords do not match",
           usernameHint: "College Email",
           loginButton: "Login",
-          signupButton: "Sign Up"),
+          signupButton: "Sign Up",
+          recoverPasswordDescription: "Send us a mail to reset your password",
+          recoverPasswordIntro: "Enter your college email id here",
+          recoverPasswordSuccess: "We'll get in touch soon.",
+          recoverPasswordButton: "Send"),
       theme: LoginTheme(
         primaryColor: Colors.blue[600],
         titleStyle: TextStyle(
@@ -95,7 +106,7 @@ class _AuthScreenState extends State<AuthScreen> {
         try {
           print("reached");
           response = await http.post(
-            "http://10.0.2.2:3000/api/signup",
+            "https://test-backend-chat.herokuapp.com/api/signup",
             headers: {
               "content-type": "application/json",
             },
@@ -107,8 +118,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 "rollNumber": data.name.endsWith("@mnit.ac.in")
                     ? data.name.substring(0, 11)
                     : data.name.substring(0, 12),
-                // "domainOfInterest": [map["domain"].toString()],
-                "college": data.name.endsWith("@mnit.ac.in") ? "MNIT" : "IIITK",
+                "college": data.name.endsWith("@mnit.ac.in") ? "MNIT" : "IIIT",
               },
             ),
           );
@@ -126,67 +136,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
             print("uid:" + uid);
             var room1 = await http.post(
-              "http://10.0.2.2:3000/api/joinroom",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: json.encode(
-                {
-                  "userId": uid,
-                  "roomId": "5ff2fbc9d0eec312cbbb6d95",
-                },
-              ),
-            );
-            var room2 = await http.post(
-              "http://10.0.2.2:3000/api/joinroom",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: json.encode(
-                {
-                  "userId": uid,
-                  "roomId": "5ff2fbe0d0eec312cbbb6d96",
-                },
-              ),
-            );
-            var room3 = await http.post(
-              "http://10.0.2.2:3000/api/joinroom",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: json.encode(
-                {
-                  "userId": uid,
-                  "roomId": "5ff2fbe5d0eec312cbbb6d97",
-                },
-              ),
-            );
-            var room4 = await http.post(
-              "http://10.0.2.2:3000/api/joinroom",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: json.encode(
-                {
-                  "userId": uid,
-                  "roomId": "5ff3517c1273f27108900481",
-                },
-              ),
-            );
-            var room5 = await http.post(
-              "http://10.0.2.2:3000/api/joinroom",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: json.encode(
-                {
-                  "userId": uid,
-                  "roomId": "5ff8699f9b6aaa69ffe0266b",
-                },
-              ),
-            );
-            var room6 = await http.post(
-              "http://10.0.2.2:3000/api/joinroom",
+              "http://18.207.115.53:3000/api/joinroom",
               headers: {
                 "content-type": "application/json",
               },
@@ -197,8 +147,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 },
               ),
             );
-            var room7 = await http.post(
-              "http://10.0.2.2:3000/api/joinroom",
+            var room2 = await http.post(
+              "http://18.207.115.53:3000/api/joinroom",
               headers: {
                 "content-type": "application/json",
               },
@@ -209,13 +159,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 },
               ),
             );
+
             if (json.decode(room1.body) == null ||
-                json.decode(room2.body) == null ||
-                json.decode(room3.body) == null ||
-                json.decode(room4.body) == null ||
-                json.decode(room5.body) == null ||
-                json.decode(room6.body) == null ||
-                json.decode(room7.body) == null) {
+                json.decode(room2.body) == null) {
               return Future.value("An error occured. Please try again.");
             }
             if (room1.statusCode > 250) {
@@ -224,21 +170,7 @@ class _AuthScreenState extends State<AuthScreen> {
             if (room2.statusCode > 250) {
               return Future.value(json.decode(room2.body)["message"]);
             }
-            if (room3.statusCode > 250) {
-              return Future.value(json.decode(room3.body)["message"]);
-            }
-            if (room4.statusCode > 250) {
-              return Future.value(json.decode(room4.body)["message"]);
-            }
-            if (room5.statusCode > 250) {
-              return Future.value(json.decode(room5.body)["message"]);
-            }
-            if (room6.statusCode > 250) {
-              return Future.value(json.decode(room6.body)["message"]);
-            }
-            if (room7.statusCode > 250) {
-              return Future.value(json.decode(room7.body)["message"]);
-            }
+
             print(json.decode(room1.body));
           }
         } catch (error) {
@@ -252,7 +184,7 @@ class _AuthScreenState extends State<AuthScreen> {
         http.Response response;
         try {
           response = await http.post(
-            "http://10.0.2.2:3000/api/signin",
+            "http://18.207.115.53:3000/api/signin",
             body: json.encode(
               {
                 "email": data.name,
@@ -281,17 +213,20 @@ class _AuthScreenState extends State<AuthScreen> {
 
         return Future.value(null);
       },
-      onRecoverPassword: (data) {
-        return Future.value("Ainnnnnnnn");
+      onRecoverPassword: (data) async {
+        FocusScope.of(context).unfocus();
+        final Email email = Email(
+          subject: "Password reset request",
+          body:
+              "I have forgotten my password for id $data on the Zine Communication Channel. Please reset it to <enter new password here>.",
+          isHTML: false,
+          recipients: [
+            "pavnesh@zine.co.in",
+          ],
+        );
+        await FlutterEmailSender.send(email);
+        return Future.value(null);
       },
     );
   }
 }
-// {
-//   "fullName": "Darshan",
-//   "email": "2020qqq1416@mnit.ac.in",
-//   "password": "123456",
-//   "rollNumber": "2020urc1416",
-//   "domainOfInterest": [ "BME" ],
-//   "college": "MNIT"
-// }

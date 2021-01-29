@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../screens/ChatScreen.dart';
 import '../screens/InfoScreen.dart';
 import '../screens/TeamScreen.dart';
 import '../screens/AchievementPage.dart';
 import '../screens/ProjectScreen.dart';
+import '../screens/ChoiceScreen.dart';
 import '../screens/AuthScreen.dart';
 import '../providers/data.dart';
 
@@ -27,6 +31,15 @@ class _HomePageState extends State<HomePage> {
   var currentIndex = 4;
   ScrollController controller;
   void _selectedTab(int index) {
+    var anonymous = Provider.of<Data>(context, listen: false).isAnonymous;
+    if (index == 0 && anonymous) {
+      Fluttertoast.showToast(
+          msg: "Please login to access profile",
+          gravity: ToastGravity.CENTER,
+          backgroundColor: Colors.blue[600]);
+      Navigator.of(context).pushReplacementNamed("/choice");
+      return;
+    }
     setState(() {
       currentIndex = index;
       print(currentIndex);
@@ -379,7 +392,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "24 th January",
+              "25 th January",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -431,7 +444,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "27 th January",
+              "1 st February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -483,7 +496,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "3 rd January",
+              "3 rd February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -535,7 +548,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "31 st Jan",
+              "4 th  February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -587,7 +600,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "1st February",
+              "5 th February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -639,7 +652,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "4th February",
+              "8th February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -691,7 +704,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "7 th February",
+              "11 th February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -849,6 +862,9 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences.getInstance().then(
       (ref) {
         var provider = Provider.of<Data>(context, listen: false);
+        if (provider.isAnonymous) {
+          return;
+        }
         provider.addData(
           ref.getString("token"),
           ref.getString("name"),
@@ -856,6 +872,9 @@ class _HomePageState extends State<HomePage> {
           ref.getString("uid"),
         );
         provider.fetchRooms();
+        provider.init().then((value) {
+          provider.initDone = true;
+        });
       },
     );
   }
@@ -872,6 +891,29 @@ class _HomePageState extends State<HomePage> {
     var provider = Provider.of<Data>(context);
     var size = MediaQuery.of(context).size;
     var orientation = MediaQuery.of(context).orientation;
+    if ((provider.rooms.length != provider.number) && !provider.isAnonymous) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("assets/images/Splash.gif"),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  "Setting things up ..... Please wait",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[200],
@@ -909,20 +951,20 @@ class _HomePageState extends State<HomePage> {
               ),
               text: 'Timeline',
             ),
-            FABBottomAppBarItem(
-                icon: Icon(
-                  Icons.phone,
-                  color: Colors.grey,
-                  size: 30,
-                ),
-                text: 'Contact Us'),
-            FABBottomAppBarItem(
-                icon: FaIcon(
-                  FontAwesomeIcons.pen,
-                  color: Colors.grey,
-                  size: 27,
-                ),
-                text: 'Blogs'),
+            // FABBottomAppBarItem(
+            //     icon: Icon(
+            //       Icons.phone,
+            //       color: Colors.grey,
+            //       size: 30,
+            //     ),
+            //     text: 'Contact Us'),
+            // FABBottomAppBarItem(
+            //     icon: FaIcon(
+            //       FontAwesomeIcons.pen,
+            //       color: Colors.grey,
+            //       size: 27,
+            //     ),
+            //     text: 'Blogs'),
           ],
         ),
         body: Stack(
@@ -950,7 +992,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     IconButton(
                       icon: Icon(
-                        IconData(
+                        const IconData(
                           0xf16d,
                           fontFamily: "Insta",
                           fontPackage: null,
@@ -1187,13 +1229,30 @@ class _HomePageState extends State<HomePage> {
                           child: InkWell(
                             splashColor: Colors.blue[200],
                             onTap: () {
+                              if (provider.isAnonymous) {
+                                Fluttertoast.showToast(
+                                  msg: "Please login to access chats",
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: Colors.blue[600],
+                                );
+                                Navigator.of(context)
+                                    .pushReplacementNamed("/choice");
+                                return;
+                              }
+                              if ((provider.rooms.length != provider.number)) {
+                                return;
+                              }
+
                               Navigator.of(context).pushNamed(ChatScreen.route);
                             },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.question_answer,
+                                  ((provider.rooms.length != provider.number) &&
+                                          !provider.isAnonymous)
+                                      ? Icons.timer
+                                      : Icons.question_answer,
                                   color: Colors.grey,
                                   size: orientation == Orientation.portrait
                                       ? 60
@@ -1203,16 +1262,20 @@ class _HomePageState extends State<HomePage> {
                                   height: 15,
                                 ),
                                 FittedBox(
-                                  child: Text(
-                                    "Chat",
-                                    style: TextStyle(
-                                        fontFamily: "Opensans",
-                                        color: Colors.grey[700],
-                                        fontSize:
-                                            orientation == Orientation.portrait
-                                                ? 20
-                                                : 36),
-                                  ),
+                                  child: ((provider.rooms.length !=
+                                              provider.number) &&
+                                          !provider.isAnonymous)
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                          "Chat",
+                                          style: TextStyle(
+                                              fontFamily: "Opensans",
+                                              color: Colors.grey[700],
+                                              fontSize: orientation ==
+                                                      Orientation.portrait
+                                                  ? 20
+                                                  : 36),
+                                        ),
                                 )
                               ],
                             ),
@@ -1228,6 +1291,42 @@ class _HomePageState extends State<HomePage> {
                   ),
                 SliverList(
                   delegate: SliverChildListDelegate([
+                    if (currentIndex == 4)
+                      Card(
+                        margin: EdgeInsets.all(25),
+                        elevation: 15,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Center(
+                            child: Linkify(
+                              onOpen: (link) async {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return Scaffold(
+                                    appBar: AppBar(),
+                                    body: WebView(
+                                      javascriptMode:
+                                          JavascriptMode.unrestricted,
+                                      initialUrl: link.url,
+                                    ),
+                                  );
+                                }));
+                              },
+                              style: TextStyle(
+                                fontFamily: "Opensans",
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              text:
+                                  "Link to blogs : http://zine.co.in/blogs.php",
+                              linkStyle: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.blue,
+                                  fontSize: 14),
+                            ),
+                          ),
+                        ),
+                      ),
                     if (currentIndex == 0)
                       SizedBox(
                         height: 50,
@@ -1239,7 +1338,7 @@ class _HomePageState extends State<HomePage> {
                         child: TextFormField(
                           style: TextStyle(
                             fontFamily: "OpenSans",
-                            fontSize: 16,
+                            fontSize: 14,
                             // fontWeight: FontWeight.bold,
                           ),
                           enabled: false,
@@ -1276,7 +1375,7 @@ class _HomePageState extends State<HomePage> {
                         child: TextFormField(
                           style: TextStyle(
                             fontFamily: "OpenSans",
-                            fontSize: 16,
+                            fontSize: 14,
                             //fontWeight: FontWeight.bold,
                           ),
                           enabled: false,
@@ -1308,54 +1407,50 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     if (currentIndex == 0)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 70),
-                        child: RaisedButton(
-                          color: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            "Log Out",
-                            style: TextStyle(
-                              fontFamily: "OpenSans",
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 80,
+                            ),
+                            child: Container(
+                              width: 140,
+                              child: RaisedButton(
+                                color: Colors.blue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    "Log Out",
+                                    style: TextStyle(
+                                      fontFamily: "OpenSans",
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  var ref =
+                                      await SharedPreferences.getInstance();
+                                  ref.clear();
+                                  Provider.of<Data>(context, listen: false)
+                                      .clear();
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(builder: (ctx) {
+                                    return ChoiceScreen();
+                                  }));
+                                },
+                              ),
                             ),
                           ),
-                          onPressed: () async {
-                            var ref = await SharedPreferences.getInstance();
-                            ref.clear();
-                            Provider.of<Data>(context, listen: false).clear();
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(builder: (ctx) {
-                              return FutureBuilder(
-                                  future: SharedPreferences.getInstance().then(
-                                    (value) => value.getString("token"),
-                                  ),
-                                  builder: (ctx, snap) {
-                                    if (snap.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return Scaffold(
-                                        body: Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      );
-                                    }
-                                    if (snap.hasData) {
-                                      return HomePage();
-                                    }
-                                    return AuthScreen();
-                                  });
-                            }));
-                          },
-                        ),
+                        ],
                       ),
                     if (currentIndex == 1) ...buildTimeline(orientation),
                     SizedBox(
-                      height: currentIndex == 0 ? 200 : 250,
+                      height: 250,
                     )
                   ]),
                 )

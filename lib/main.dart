@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './screens/HomePage.dart';
@@ -7,11 +9,17 @@ import './screens/AchievementPage.dart';
 import './screens/ProjectScreen.dart';
 import './screens/AuthScreen.dart';
 import './screens/ChatScreen.dart';
+import './screens/ChoiceScreen.dart';
 import 'package:splashscreen/splashscreen.dart';
 import './providers/data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MyApp());
 }
 
@@ -32,13 +40,14 @@ class MyApp extends StatelessWidget {
           ProjectScreen.route: (ctx) => ProjectScreen(),
           HomePage.route: (ctx) => HomePage(),
           AuthScreen.route: (ctx) => AuthScreen(),
-          ChatScreen.route: (ctx) => ChatScreen()
+          ChatScreen.route: (ctx) => ChatScreen(),
+          ChoiceScreen.route: (ctx) => ChoiceScreen()
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         home: SplashScreen(
-          seconds: 4,
+          seconds: 2,
           navigateAfterSeconds: FutureBuilder(
               future: SharedPreferences.getInstance().then(
                 (value) => value.getString("token"),
@@ -54,23 +63,15 @@ class MyApp extends StatelessWidget {
                 if (snap.hasData) {
                   return HomePage();
                 }
-                return AuthScreen();
+                return ChoiceScreen();
               }),
           image: Image.asset(
-            "assets/images/Splash.gif",
+            "assets/images/zine-app.gif",
           ),
           loaderColor: Colors.blue[800],
           backgroundColor: Colors.white,
-          photoSize: 200,
-          title: Text(
-            "Where Imagination Leads To Creation",
-            style: TextStyle(
-              fontFamily: "OpenSans",
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue[800],
-            ),
-          ),
+          photoSize: 350,
+          useLoader: false,
         ),
       ),
     );

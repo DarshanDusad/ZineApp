@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 
 class TeamScreen extends StatelessWidget {
   static const route = "/team";
+  String getEmail(String text) {
+    String firstPart = text;
+    String secondPart;
+    if (text.contains(" ")) {
+      firstPart = text.substring(0, text.indexOf(" "));
+      secondPart = text.substring(text.indexOf(" ") + 1, text.length);
+      return firstPart.toLowerCase() + "@zine.co.in";
+    }
+    if (firstPart.length < 2) {
+      firstPart += firstPart;
+    }
+    return firstPart.toLowerCase() + "@zine.co.in";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,45 +171,49 @@ class TeamScreen extends StatelessWidget {
                           backgroundImage:
                               AssetImage("assets/images/team${i + 1}.jpg"),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              FittedBox(
-                                child: Text(
-                                  names[i],
-                                  style: TextStyle(
+                        Container(
+                          width: 180,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                FittedBox(
+                                  child: Text(
+                                    names[i],
+                                    style: TextStyle(
                                       fontFamily: "OpenSans",
                                       color: Colors.grey,
-                                      fontSize: 18),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 18,
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  branches[i],
-                                  style: TextStyle(
-                                    fontFamily: "OpenSans",
-                                    color: Colors.grey,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  ids[i],
-                                  style: TextStyle(
+                                SizedBox(
+                                  height: 18,
+                                ),
+                                FittedBox(
+                                  child: Text(
+                                    branches[i],
+                                    style: TextStyle(
                                       fontFamily: "OpenSans",
                                       color: Colors.grey,
-                                      fontSize: 13),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                FittedBox(
+                                  child: Text(
+                                    getEmail(names[i]),
+                                    style: TextStyle(
+                                        fontFamily: "OpenSans",
+                                        color: Colors.grey,
+                                        fontSize: 13),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -221,45 +238,48 @@ class TeamScreen extends StatelessWidget {
                           backgroundImage:
                               AssetImage("assets/images/team${i + 12}.jpg"),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              FittedBox(
-                                child: Text(
-                                  names[i + 11],
-                                  style: TextStyle(
-                                      fontFamily: "OpenSans",
-                                      color: Colors.grey,
-                                      fontSize: 18),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 18,
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  branches[i + 11],
-                                  style: TextStyle(
-                                    fontFamily: "OpenSans",
-                                    color: Colors.grey,
+                        Container(
+                          width: 180,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                FittedBox(
+                                  child: Text(
+                                    names[i + 11],
+                                    style: TextStyle(
+                                        fontFamily: "OpenSans",
+                                        color: Colors.grey,
+                                        fontSize: 18),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  ids[i + 11],
-                                  style: TextStyle(
+                                SizedBox(
+                                  height: 18,
+                                ),
+                                FittedBox(
+                                  child: Text(
+                                    branches[i + 11],
+                                    style: TextStyle(
                                       fontFamily: "OpenSans",
                                       color: Colors.grey,
-                                      fontSize: 13),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                FittedBox(
+                                  child: Text(
+                                    getEmail(names[i + 11]),
+                                    style: TextStyle(
+                                        fontFamily: "OpenSans",
+                                        color: Colors.grey,
+                                        fontSize: 13),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -284,45 +304,48 @@ class TeamScreen extends StatelessWidget {
                           backgroundImage:
                               AssetImage("assets/images/team${i + 22}.jpg"),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              FittedBox(
-                                child: Text(
-                                  names[i + 21],
-                                  style: TextStyle(
-                                      fontFamily: "OpenSans",
-                                      color: Colors.grey,
-                                      fontSize: 18),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 18,
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  branches[i + 21],
-                                  style: TextStyle(
-                                    fontFamily: "OpenSans",
-                                    color: Colors.grey,
+                        Container(
+                          width: 180,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                FittedBox(
+                                  child: Text(
+                                    names[i + 21],
+                                    style: TextStyle(
+                                        fontFamily: "OpenSans",
+                                        color: Colors.grey,
+                                        fontSize: 18),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  ids[i + 21],
-                                  style: TextStyle(
+                                SizedBox(
+                                  height: 18,
+                                ),
+                                FittedBox(
+                                  child: Text(
+                                    branches[i + 21],
+                                    style: TextStyle(
                                       fontFamily: "OpenSans",
                                       color: Colors.grey,
-                                      fontSize: 13),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                FittedBox(
+                                  child: Text(
+                                    getEmail(names[i + 21]),
+                                    style: TextStyle(
+                                        fontFamily: "OpenSans",
+                                        color: Colors.grey,
+                                        fontSize: 13),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       ],
