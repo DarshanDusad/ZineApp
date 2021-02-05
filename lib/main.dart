@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       },
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Zine',
+        title: 'ZINE',
         routes: {
           InfoScreen.route: (ctx) => InfoScreen(),
           TeamScreen.route: (ctx) => TeamScreen(),

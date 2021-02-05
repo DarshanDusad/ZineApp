@@ -29,7 +29,7 @@ class CustomDrawer extends StatelessWidget {
     return firstPart[0].toUpperCase() + firstPart[1].toUpperCase();
   }
 
-  List<Widget> getMembers(int i, List<Room> rooms) {
+  List<Widget> getMembers(int i, List<Room> rooms, BuildContext context) {
     if (!chats) {
       return [Container()];
     }
@@ -41,7 +41,62 @@ class CustomDrawer extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: ListTile(
             contentPadding: EdgeInsets.all(5),
-            onTap: () {},
+            onTap: () async {
+              Member member = rooms[i].members[index];
+              if (member.name ==
+                  Provider.of<Data>(context, listen: false).name) {
+                return;
+              }
+              int exists =
+                  rooms.indexWhere((element) => element.name == member.name);
+              if (exists != -1) {
+                onTap(exists);
+                Navigator.of(context).pop();
+              } else {
+                await showDialog(
+                  context: context,
+                  builder: (ctx) {
+                    return AlertDialog(
+                      title: Text(
+                        "Do you want to start a private conversation with ${member.name} ?",
+                        style: TextStyle(
+                          fontFamily: "OpenSans",
+                          fontSize: 14,
+                        ),
+                      ),
+                      actions: [
+                        FlatButton(
+                          child: Text(
+                            "YES",
+                            style: TextStyle(
+                                fontFamily: "OpenSans", color: Colors.blue),
+                          ),
+                          onPressed: () async {
+                            await Provider.of<Data>(context, listen: false)
+                                .getDMroom(member);
+                            int i = rooms.indexWhere(
+                                (element) => element.name == member.name);
+                            onTap(i);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: Text(
+                            "NO",
+                            style: TextStyle(
+                                fontFamily: "OpenSans", color: Colors.blue),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+                Navigator.of(context).pop();
+              }
+            },
             leading: CircleAvatar(
               radius: 22,
               backgroundColor: rooms[i].members[index].color,
@@ -93,7 +148,7 @@ class CustomDrawer extends StatelessWidget {
           contentPadding: EdgeInsets.all(5),
           leading: CircleAvatar(
             radius: 22,
-            backgroundColor: colors[rooms[i].name] ?? Colors.green,
+            backgroundColor: rooms[i].color,
             child: Text(
               getInitials(rooms[i].name),
               style: TextStyle(
@@ -165,7 +220,7 @@ class CustomDrawer extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          ...getMembers(index, provider.rooms),
+          ...getMembers(index, provider.rooms, context),
           SizedBox(
             height: 10,
           ),

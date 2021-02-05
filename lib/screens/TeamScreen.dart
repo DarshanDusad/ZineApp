@@ -75,7 +75,7 @@ class TeamScreen extends StatelessWidget {
       "Electronics",
       "Electrical",
       "Computer Science",
-      "Mechanical Engineering",
+      "Mechanical",
       "Electronics",
       "Computer Science",
       "Electronics"

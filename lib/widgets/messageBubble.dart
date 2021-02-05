@@ -99,8 +99,7 @@ class MessageBubble extends StatelessWidget {
                     padding: EdgeInsets.all(5),
                     child: FittedBox(
                       child: Text(
-                        DateFormat("E , d MMM").add_jm().format(
-                            dateTime.add(Duration(hours: 5, minutes: 30))),
+                        DateFormat("E , d MMM").add_jm().format(dateTime),
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontFamily: "Opensans",

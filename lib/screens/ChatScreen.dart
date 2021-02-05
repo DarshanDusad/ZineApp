@@ -20,18 +20,25 @@ class _ChatScreenState extends State<ChatScreen> {
   var focusNode = FocusNode();
   var textController = TextEditingController();
   var chats = false;
+  var loading = false;
   @override
   void initState() {
     super.initState();
-    Provider.of<Data>(context, listen: false).sort();
+    var provider = Provider.of<Data>(context, listen: false);
+    provider.sort();
   }
 
   void onTap(int index) {
     setState(() {
       roomIndex = index;
       chats = true;
+      loading = true;
     });
-    Provider.of<Data>(context, listen: false).changeRoom(index);
+    Provider.of<Data>(context, listen: false).changeRoom(index).then((value) {
+      setState(() {
+        loading = false;
+      });
+    });
     if (!chats) {
       return;
     }
@@ -77,6 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
     var size = MediaQuery.of(context).size;
     var media = MediaQuery.of(context);
     var provider = Provider.of<Data>(context);
+
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
@@ -87,6 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
             TopBar(
               focusNode: focusNode,
               title: !chats ? "Chats" : provider.rooms[roomIndex].name,
+              onTap: onTap,
             ),
             Positioned(
               top: 130,
@@ -109,7 +118,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                       ),
-                      if (!chats) ...[
+                      if (loading)
+                        SizedBox(
+                          height: 200,
+                        ),
+                      if (loading) Center(child: CircularProgressIndicator()),
+                      if (!chats && !loading) ...[
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Image.asset("assets/images/Splash.gif"),
@@ -126,7 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         ),
                       ],
-                      if (chats)
+                      if (chats && !loading)
                         Expanded(
                           child: ListView(
                             reverse: true,
@@ -152,7 +166,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ),
-            if (chats)
+            if (chats && !loading)
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -216,7 +230,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               )),
                         ),
                       ),
-                      if (chats)
+                      if (chats && !loading)
                         IconButton(
                           icon: Icon(
                             Icons.send,
@@ -235,12 +249,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 json.encode({
                                   'senderId': provider.uid,
                                   'content': textController.text,
-                                  'createdAt': DateTime.now()
-                                      .subtract(Duration(
-                                        hours: 5,
-                                        minutes: 30,
-                                      ))
-                                      .toIso8601String(),
+                                  'createdAt': DateTime.now().toIso8601String(),
                                   'senderName': provider.name
                                 }), () {
                               print("Sent!!");
@@ -262,11 +271,9 @@ class _ChatScreenState extends State<ChatScreen> {
 class TopBar extends StatelessWidget {
   final FocusNode focusNode;
   final String title;
-  const TopBar({
-    Key key,
-    this.focusNode,
-    this.title,
-  }) : super(key: key);
+  final Function onTap;
+  const TopBar({Key key, this.focusNode, this.title, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +285,7 @@ class TopBar extends StatelessWidget {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 25, top: 20, bottom: 10),
+                padding: const EdgeInsets.only(left: 25, top: 15, bottom: 10),
                 child: IconButton(
                   icon: Icon(
                     Icons.menu,
@@ -307,20 +314,39 @@ class TopBar extends StatelessWidget {
               )
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 80.0, right: 40),
-            child: FittedBox(
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: title == "Chats" ? 30 : 22,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "OpenSans",
-                  color: Colors.white,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    left: title != "Chats" ? 100.0 : 60.0, right: 40),
+                child: FittedBox(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: title == "Chats" ? 30 : 22,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "OpenSans",
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              if (title != "Chats")
+                IconButton(
+                  icon: Icon(
+                    Icons.refresh,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    int index =
+                        Provider.of<Data>(context, listen: false).currentRoom;
+                    onTap(index);
+                  },
+                ),
+            ],
           ),
         ],
       ),

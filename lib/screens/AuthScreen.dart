@@ -9,6 +9,10 @@ import "package:shared_preferences/shared_preferences.dart";
 import 'package:provider/provider.dart';
 import 'package:zine/providers/data.dart';
 
+const mainUrl = "18.207.115.53:3000";
+const testUrl = "10.0.2.2";
+const url = "18.207.115.53:3000";
+
 class AuthScreen extends StatefulWidget {
   static const route = "/auth";
   @override
@@ -106,7 +110,7 @@ class _AuthScreenState extends State<AuthScreen> {
         try {
           print("reached");
           response = await http.post(
-            "https://test-backend-chat.herokuapp.com/api/signup",
+            "https://$url/api/signup",
             headers: {
               "content-type": "application/json",
             },
@@ -136,7 +140,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
             print("uid:" + uid);
             var room1 = await http.post(
-              "http://18.207.115.53:3000/api/joinroom",
+              "http://$url/api/joinroom",
               headers: {
                 "content-type": "application/json",
               },
@@ -144,11 +148,12 @@ class _AuthScreenState extends State<AuthScreen> {
                 {
                   "userId": uid,
                   "roomId": "5ffc310d5bfdb84beba3ffa9",
+                  "userName": map["name"].toString()
                 },
               ),
             );
             var room2 = await http.post(
-              "http://18.207.115.53:3000/api/joinroom",
+              "http://$url/api/joinroom",
               headers: {
                 "content-type": "application/json",
               },
@@ -156,6 +161,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 {
                   "userId": uid,
                   "roomId": "5ffc31195bfdb84beba3ffaa",
+                  "userName": map["name"].toString()
                 },
               ),
             );
@@ -184,7 +190,7 @@ class _AuthScreenState extends State<AuthScreen> {
         http.Response response;
         try {
           response = await http.post(
-            "http://18.207.115.53:3000/api/signin",
+            "http://$url/api/signin",
             body: json.encode(
               {
                 "email": data.name,

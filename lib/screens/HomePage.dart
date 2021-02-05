@@ -496,7 +496,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "3 rd February",
+              "4 th February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -548,7 +548,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "4 th  February",
+              "5 th  February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -600,7 +600,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "5 th February",
+              "6 th February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -652,7 +652,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "8th February",
+              "9th February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -704,7 +704,7 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             alignment: Alignment.center,
             child: Text(
-              "11 th February",
+              "12 th February",
               style: TextStyle(
                 fontFamily: "Lobster",
                 fontSize: 16,
@@ -890,7 +890,32 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var provider = Provider.of<Data>(context);
     var size = MediaQuery.of(context).size;
+    print(provider.networkError);
     var orientation = MediaQuery.of(context).orientation;
+    if (provider.networkError && !provider.isAnonymous) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("assets/images/Splash.gif"),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  "Please check your network connection and restart",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "OpenSans",
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     if ((provider.rooms.length != provider.number) && !provider.isAnonymous) {
       return Scaffold(
         body: Center(
