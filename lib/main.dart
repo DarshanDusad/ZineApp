@@ -46,34 +46,45 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: SplashScreen(
-          seconds: 2,
-          navigateAfterSeconds: FutureBuilder(
-              future: SharedPreferences.getInstance().then(
-                (value) => value.getString("token"),
-              ),
-              builder: (ctx, snap) {
-                if (snap.connectionState == ConnectionState.waiting) {
-                  return Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-                if (snap.hasData) {
-                  return HomePage();
-                }
-                return ChoiceScreen();
-              }),
-          image: Image.asset(
-            "assets/images/zine-app.gif",
-          ),
-          loaderColor: Colors.blue[800],
-          backgroundColor: Colors.white,
-          photoSize: 350,
-          useLoader: false,
-        ),
+        home: Home(),
       ),
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SplashScreen(
+      seconds: 2,
+      navigateAfterSeconds: FutureBuilder(
+          future: SharedPreferences.getInstance().then(
+            (value) => value.getString("token"),
+          ),
+          builder: (ctx, snap) {
+            if (snap.connectionState == ConnectionState.waiting) {
+              return Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            if (snap.hasData) {
+              return HomePage();
+            }
+            return ChoiceScreen();
+          }),
+      image: Image.asset(
+        "assets/images/zine-app.gif",
+      ),
+      loaderColor: Colors.blue[800],
+      backgroundColor: Colors.white,
+      photoSize: MediaQuery.of(context).size.height * 0.45,
+      useLoader: false,
     );
   }
 }
